@@ -1,6 +1,13 @@
-// This is our main function
-numbers = [3, 13, 5, 7];
-words = ['Fizz', 'Fezz', 'Buzz', 'Bang']
+//Allowing users to specify their own functions would work for 3 - 11,
+// just by allowing them to set via command line the contents of the words array
+// allowing them to specify reordering operations like 17 would be harder, as it is a different
+// type of change not captured in the arrays i've made -- possibly an array of predefined functions
+// attachable to any number will make this easier to change via user command line inputs?
+
+numbers = [3, 13, 5, 7, 11];
+active = [false, false, false, false, false];
+words = ['Fizz', 'Fezz', 'Buzz', 'Bang', 'Bong'];
+active17 = false;
 
 function fizzbuzz(max) {
     console.log("Hello, World!");
@@ -8,20 +15,20 @@ function fizzbuzz(max) {
     for (var i = 1; i <= max; i++){
         var text =[];
         for (var j = 0; j < numbers.length; j++){
-            if (i%numbers[j] == 0){
+            if (i%numbers[j] === 0 && active[j] === true){
                 text.push(words[j]);
             }
         }
 
-        if (i%11 == 0){
+        if (text.includes('Bong') === true){
             text = ['Bong'];
         }
-        if (i%17 == 0){
+
+        if (i%17 === 0 && active17 === true){
             text = text.reverse();
         }
         
-        
-        if (text.length == 0){
+        if (text.length === 0 || text == ['']){
             console.log(i)
         } else {
             // tostring has commas unfortunately
@@ -35,9 +42,6 @@ function fizzbuzz(max) {
 
 }
 
-// ask for a max
-//const max = 255;
-
 // readline bit acquired from w3schools
 
 const { createInterface } = require('readline');
@@ -48,12 +52,44 @@ const getInput = createInterface ({
     output: process.stdout
 });
 
+function makeActive(answer){
+    answer = answer.trim();
+    let thisMultiple = Number(answer);
+    let activeIndex = numbers.indexOf(thisMultiple);
+    if (activeIndex >= 0){
+        active[activeIndex] = true;
+        console.log(thisMultiple + ' has been added!');
+        return true;
+    } else if (thisMultiple == 17) {
+        active17 = true;
+        console.log(thisMultiple + ' has been added!');
+        return true;
+    }
+    console.log (answer + ' is not a valid value. Its presence has been ignored.');
+    return false;
+}
 
 // Now, we run the main function:
-getInput.question ('What is the maximum number you would like FizzBuzz to go to?  ', (answer) =>{
-    fizzbuzz(answer);
-    getInput.close();
+getInput.question ('Enter a multiple to process, separated by commas. eg: 3, 5, 7, 11, 13, 17\n', (answer) =>{
+    if (answer === ''){
+        console.log ('No input. Try again!');
+    } else {
+        answer = answer.split(',');
+        for (var i = 0; i < answer.length; i++){
+            makeActive(answer[i]);
+        }
+    }
+    getInput.question ('What is the maximum number you would like FizzBuzz to go to?  ', (answer) =>{
+        fizzbuzz(answer);
+        getInput.close();
+    });
 });
+
+
+
+
+
+
 
 
 

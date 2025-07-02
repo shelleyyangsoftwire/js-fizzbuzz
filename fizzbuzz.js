@@ -12,6 +12,12 @@ function fizzbuzz() {
                 txt += words[j];
             }
         }
+        if (i%11 == 0){
+            txt = 'Bong';
+        }
+        if (i%13 == 0){
+            txt = 'Fezz' + txt;
+        }
         if (txt==''){
             console.log(i)
         } else {

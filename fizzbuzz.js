@@ -28,7 +28,7 @@ function fizzbuzz(max) {
             text = text.reverse();
         }
         
-        if (text.length === 0 || text == ['']){
+        if (text.length === 0){
             console.log(i)
         } else {
             // tostring has commas unfortunately
